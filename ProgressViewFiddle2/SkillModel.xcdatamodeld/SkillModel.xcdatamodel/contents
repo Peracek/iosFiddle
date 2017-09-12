@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="12141" systemVersion="16G29" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Skill" representedClassName=".Skill" syncable="YES" codeGenerationType="category">
+        <attribute name="desc" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="layout_column" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="layout_row" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="layout_width" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="childSkills" optional="YES" toMany="YES" deletionRule="No Action" destinationEntity="Skill" inverseName="superSkill" inverseEntity="Skill" syncable="YES"/>
+        <relationship name="superSkill" optional="YES" maxCount="1" deletionRule="No Action" destinationEntity="Skill" inverseName="childSkills" inverseEntity="Skill" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Skill" positionX="-1224" positionY="3557" width="128" height="148"/>
+    </elements>
+</model>
