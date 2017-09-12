@@ -41,21 +41,18 @@ class SkillCollectionViewLayout: UICollectionViewLayout {
         let minIndex = Int(floor(minX / cellWidth))
         let maxIndex = Int(ceil(maxX / cellWidth))
         
-        let numberOfSections = collectionView?.numberOfSections ?? 0
-        for section in 0..<numberOfSections {
-            let itemsInSection = collectionView?.numberOfItems(inSection: section) ?? 0
-            for index in minIndex.withinBounds(0, itemsInSection-1)...maxIndex.withinBounds(0, itemsInSection-1) {
-                let indexPath = IndexPath(item: index, section: section)
-                let gridPositionAndSize = delegate.collectionView(collectionView!, positionAndSizeForItemAt: indexPath)
-                let attr = UICollectionViewLayoutAttributes(forCellWith: indexPath)
-                let frame = CGRect(
-                    x: gridPositionAndSize.minX * cellWidth,
-                    y: gridPositionAndSize.minY * cellHeight,
-                    width: gridPositionAndSize.width * cellWidth,
-                    height: gridPositionAndSize.height * cellHeight)
-                attr.frame = frame
-                layoutAttributes.append(attr)
-            }
+        let indexPaths = delegate.collectionView(collectionView!, indexPathsForItemsBetween: minIndex, and: maxIndex)
+        
+        for indexPath in indexPaths {
+            let gridPositionAndSize = delegate.collectionView(collectionView!, positionAndSizeForItemAt: indexPath)
+            let attr = UICollectionViewLayoutAttributes(forCellWith: indexPath)
+            let frame = CGRect(
+                x: gridPositionAndSize.minX * cellWidth,
+                y: gridPositionAndSize.minY * cellHeight,
+                width: gridPositionAndSize.width * cellWidth,
+                height: gridPositionAndSize.height * cellHeight)
+            attr.frame = frame
+            layoutAttributes.append(attr)
         }
         return layoutAttributes
     }
