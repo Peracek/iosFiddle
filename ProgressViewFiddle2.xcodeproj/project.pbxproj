@@ -12,8 +12,6 @@
 		BB51CC471F52E09C00A47A3B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BB51CC461F52E09C00A47A3B /* Assets.xcassets */; };
 		BB51CC4A1F52E09C00A47A3B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BB51CC481F52E09C00A47A3B /* LaunchScreen.storyboard */; };
 		BB51CC531F52E11000A47A3B /* SkillCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB51CC521F52E11000A47A3B /* SkillCollectionViewController.swift */; };
-		BB51CC551F52E36100A47A3B /* _Skill.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB51CC541F52E36100A47A3B /* _Skill.swift */; };
-		BB51CC571F52E77500A47A3B /* SkillLayoutInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB51CC561F52E77500A47A3B /* SkillLayoutInfo.swift */; };
 		BB51CC591F52ECFA00A47A3B /* SkillCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB51CC581F52ECFA00A47A3B /* SkillCollectionViewLayout.swift */; };
 		BB51CC5B1F5D6F9200A47A3B /* SkillCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB51CC5A1F5D6F9200A47A3B /* SkillCollectionViewCell.swift */; };
 		BB51CC7F1F5D775200A47A3B /* SkillModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = BB51CC7D1F5D775200A47A3B /* SkillModel.xcdatamodeld */; };
@@ -29,8 +27,6 @@
 		BB51CC491F52E09C00A47A3B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		BB51CC4B1F52E09C00A47A3B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BB51CC521F52E11000A47A3B /* SkillCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SkillCollectionViewController.swift; sourceTree = "<group>"; };
-		BB51CC541F52E36100A47A3B /* _Skill.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = _Skill.swift; sourceTree = "<group>"; };
-		BB51CC561F52E77500A47A3B /* SkillLayoutInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SkillLayoutInfo.swift; sourceTree = "<group>"; };
 		BB51CC581F52ECFA00A47A3B /* SkillCollectionViewLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SkillCollectionViewLayout.swift; sourceTree = "<group>"; };
 		BB51CC5A1F5D6F9200A47A3B /* SkillCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SkillCollectionViewCell.swift; sourceTree = "<group>"; };
 		BB51CC7E1F5D775200A47A3B /* SkillModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SkillModel.xcdatamodel; sourceTree = "<group>"; };
@@ -72,9 +68,7 @@
 				BB51CC521F52E11000A47A3B /* SkillCollectionViewController.swift */,
 				BB51CC5A1F5D6F9200A47A3B /* SkillCollectionViewCell.swift */,
 				BB51CC581F52ECFA00A47A3B /* SkillCollectionViewLayout.swift */,
-				BB51CC541F52E36100A47A3B /* _Skill.swift */,
 				BB51CC801F5D7A7D00A47A3B /* Skill.swift */,
-				BB51CC561F52E77500A47A3B /* SkillLayoutInfo.swift */,
 				BB51CC7D1F5D775200A47A3B /* SkillModel.xcdatamodeld */,
 				BB51CC821F5D7E4800A47A3B /* DataHelper.swift */,
 				BB51CC511F52E0B700A47A3B /* Support Files */,
@@ -167,8 +161,6 @@
 			files = (
 				BB51CC831F5D7E4800A47A3B /* DataHelper.swift in Sources */,
 				BB51CC5B1F5D6F9200A47A3B /* SkillCollectionViewCell.swift in Sources */,
-				BB51CC551F52E36100A47A3B /* _Skill.swift in Sources */,
-				BB51CC571F52E77500A47A3B /* SkillLayoutInfo.swift in Sources */,
 				BB51CC531F52E11000A47A3B /* SkillCollectionViewController.swift in Sources */,
 				BB51CC7F1F5D775200A47A3B /* SkillModel.xcdatamodeld in Sources */,
 				BB51CC811F5D7A7D00A47A3B /* Skill.swift in Sources */,

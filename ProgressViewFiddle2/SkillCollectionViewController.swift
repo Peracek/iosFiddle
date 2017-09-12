@@ -16,17 +16,14 @@ class SkillCollectionViewController: UICollectionViewController, SkillLayoutDele
     
     private var skills: [[Skill]] = []
     private var skillLayout: SkillCollectionViewLayout!
-    public var width: Int!
     
     override func viewDidLoad() {
+        skillLayout = collectionViewLayout as! SkillCollectionViewLayout
+        skillLayout.delegate = self
+        
         // TODO opravit, je potreba pockat na seed databaze
         sleep(3)
         getData()
-        
-        
-        skillLayout = collectionViewLayout as! SkillCollectionViewLayout
-        skillLayout.delegate = self
-        skillLayout.width = self.width
         
         let pinchRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(SkillCollectionViewController.scaleView(sender:)))
         view.addGestureRecognizer(pinchRecognizer)
@@ -101,7 +98,8 @@ class SkillCollectionViewController: UICollectionViewController, SkillLayoutDele
             let maxColSkill = try context.fetch(maxColumnRequest)
             
             let numberOfRows = maxRowSkill[0].layout_row + 1
-            self.width = Int(maxColSkill[0].layout_column) + 1
+            self.skillLayout.rows = Int(numberOfRows)
+            self.skillLayout.columns = Int(maxColSkill[0].layout_column) + 1
             
             for row in 0..<numberOfRows {
                 let req = NSFetchRequest<Skill>(entityName: "Skill")

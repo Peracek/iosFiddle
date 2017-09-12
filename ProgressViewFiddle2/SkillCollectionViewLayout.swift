@@ -18,18 +18,27 @@ class SkillCollectionViewLayout: UICollectionViewLayout {
     
     private var cellWidth: CGFloat = 200.0
     
-    private let cellHeight: CGFloat = 100.0
+    private var cellHeight: CGFloat = 100.0
     
     public var delegate: SkillLayoutDelegate!
     
-    public var width: Int = 0
+    public var columns: Int = 0
+    public var rows: Int = 0 {
+        didSet {
+            if let viewHeight = collectionView?.frame.height {
+                cellHeight = viewHeight / CGFloat(rows)
+            }
+        }
+    }
+    
+    
 //    override func prepare() {
 //        <#code#>
 //    }
     
     override var collectionViewContentSize: CGSize {
         
-        return CGSize(width: CGFloat(width) * cellWidth, height: collectionView?.frame.height ?? 0)
+        return CGSize(width: CGFloat(columns) * cellWidth, height: collectionView?.frame.height ?? 0)
     }
     
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
