@@ -14,16 +14,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-    static var managedObjectContext: NSManagedObjectContext {
-        return (UIApplication.shared.delegate as! AppDelegate).managedObjectContext
+    static var persistentContainer: NSPersistentContainer {
+        return (UIApplication.shared.delegate as! AppDelegate).persistentContainer
     }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
         
-        let dataHelper = DataHelper(context: self.managedObjectContext)
-        dataHelper.seedSkills()
-        dataHelper.printSkills()
+        SkillController.downloadSkills()
+        print(applicationDocumentsDirectory)
+        
+        // Override point for customization after application launch.
         
         return true
     }
@@ -54,45 +54,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     lazy var applicationDocumentsDirectory: URL = {
         // The directory the application uses to store the Core Data store file. This code uses a directory named "com.andrewcbancroft.Zootastic" in the application's documents Application Support directory.
-        let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        let urls = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask)
         return urls[urls.count-1]
     }()
     
-    lazy var managedObjectModel: NSManagedObjectModel = {
-        // The managed object model for the application. This property is not optional. It is a fatal error for the application not to be able to find and load its model.
-        let modelURL = Bundle.main.url(forResource: "SkillModel", withExtension: "momd")!
-        return NSManagedObjectModel(contentsOf: modelURL)!
-    }()
-    
-    lazy var persistentStoreCoordinator: NSPersistentStoreCoordinator = {
-        let coordinator = NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
-        
-        let url = self.applicationDocumentsDirectory.appendingPathComponent("SkillModel.sqlite")
-        
-        do {
-            try FileManager.default.removeItem(at: url)
-        } catch _ {
-        }
-        
-        do {
-            try coordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: url, options: nil)
-        } catch _ {
-            // stuff..
-            
-            abort()
-        }
-        
-        return coordinator
-    }()
-    
-    lazy var managedObjectContext: NSManagedObjectContext = {
-        // Returns the managed object context for the application (which is already bound to the persistent store coordinator for the application.) This property is optional since there are legitimate error conditions that could cause the creation of the context to fail.
-        let coordinator = self.persistentStoreCoordinator
-        var managedObjectContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
-        managedObjectContext.persistentStoreCoordinator = coordinator
-        return managedObjectContext
-    }()
-
 //    // MARK: - Core Data stack
     
     
@@ -105,39 +70,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //    NSManagedObjectContext
 //    ).
     
-//    
-//    lazy var persistentContainer: NSPersistentContainer = {
-//        /*
-//         The persistent container for the application. This implementation
-//         creates and returns a container, having loaded the store for the
-//         application to it. This property is optional since there are legitimate
-//         error conditions that could cause the creation of the store to fail.
-//         */
-//        let container = NSPersistentContainer(name: "SkillModel")
-//        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
-//            if let error = error as NSError? {
-//                // Replace this implementation with code to handle the error appropriately.
-//                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-//                
-//                /*
-//                 Typical reasons for an error here include:
-//                 * The parent directory does not exist, cannot be created, or disallows writing.
-//                 * The persistent store is not accessible, due to permissions or data protection when the device is locked.
-//                 * The device is out of space.
-//                 * The store could not be migrated to the current model version.
-//                 Check the error message to determine what the actual problem was.
-//                 */
-//                fatalError("Unresolved error \(error), \(error.userInfo)")
-//            }
-//        })
-//        return container
-//    }()
+    
+    lazy var persistentContainer: NSPersistentContainer = {
+        /*
+         The persistent container for the application. This implementation
+         creates and returns a container, having loaded the store for the
+         application to it. This property is optional since there are legitimate
+         error conditions that could cause the creation of the store to fail.
+         */
+        let container = NSPersistentContainer(name: "SkillModel")
+        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+            if let error = error as NSError? {
+                // Replace this implementation with code to handle the error appropriately.
+                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+                
+                /*
+                 Typical reasons for an error here include:
+                 * The parent directory does not exist, cannot be created, or disallows writing.
+                 * The persistent store is not accessible, due to permissions or data protection when the device is locked.
+                 * The device is out of space.
+                 * The store could not be migrated to the current model version.
+                 Check the error message to determine what the actual problem was.
+                 */
+                fatalError("Unresolved error \(error), \(error.userInfo)")
+            }
+        })
+        return container
+    }()
     
     // MARK: - Core Data Saving support
     
     func saveContext () {
-//        let context = persistentContainer.viewContext
-        let context = managedObjectContext
+        let context = persistentContainer.viewContext
         if context.hasChanges {
             do {
                 try context.save()
@@ -150,6 +114,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
 
+    
 
 }
 

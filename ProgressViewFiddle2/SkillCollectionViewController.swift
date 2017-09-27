@@ -8,11 +8,12 @@
 
 import UIKit
 import CoreData
+import Alamofire
 
 class SkillCollectionViewController: UICollectionViewController, SkillLayoutDelegate {
     
     //var container = (UIApplication.shared.delegate as? AppDelegate)?.managedObjectContext.
-    var context = AppDelegate.managedObjectContext
+    var context = (UIApplication.shared.delegate as? AppDelegate)!.persistentContainer.viewContext
     
     private var skills: [[Skill]] = []
     private var skillLayout: SkillCollectionViewLayout!
@@ -22,8 +23,16 @@ class SkillCollectionViewController: UICollectionViewController, SkillLayoutDele
         skillLayout.delegate = self
         
         // TODO opravit, je potreba pockat na seed databaze
-        sleep(3)
-        getData()
+        //sleep(3)
+        //getData()
+        
+        
+        NotificationCenter.default.addObserver(forName: SkillController.SKILLS_ADDED_NOTIFICATION, object: nil, queue: nil) {_ in 
+            self.getData()
+            self.collectionView?.reloadData()
+            
+        }
+        
         
         let pinchRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(SkillCollectionViewController.scaleView(sender:)))
         view.addGestureRecognizer(pinchRecognizer)
@@ -79,9 +88,6 @@ class SkillCollectionViewController: UICollectionViewController, SkillLayoutDele
     
     
     
-    
-    
-    
     private func getData() {
         
         let maxRowRequest = NSFetchRequest<Skill>(entityName: "Skill")
@@ -111,35 +117,6 @@ class SkillCollectionViewController: UICollectionViewController, SkillLayoutDele
             
         } catch _ {
         }
-        
-        
-        // TODO: fetchnout root (kterej nema parenta) a pak postupne fetchovat
-        // dalsi nodes ktery maj za parenta daneho noda
-        // pritom pocitat
-        
-        
-//        let skill7 = Skill(title: "Horse stuff", desc: "Horse stuff")
-//        let skill6 = Skill(title: "Movement", desc: "Movement", superSkill: skill7)
-//        let skill5 = Skill(title: "Nutrition", desc: "Nutrition", superSkill: skill7)
-//        let skill4 = Skill(title: "Jump", desc: "Jump", superSkill: skill6)
-//        let skill3 = Skill(title: "Run", desc: "Run", superSkill: skill6)
-//        let skill2 = Skill(title: "Walk", desc: "Walk", superSkill: skill6)
-//        let skill1 = Skill(title: "Drink", desc: "Drink", superSkill: skill5)
-//        let skill0 = Skill(title: "Eat", desc: "Eat", superSkill: skill5)
-//        
-//        let skillInfo7 = SkillLayoutInfo(skill: skill7, widthUnit: 5, gridPositionX: 0, gridPositionY: 2, color: UIColor.purple)
-//        let skillInfo6 = SkillLayoutInfo(skill: skill6, widthUnit: 3, gridPositionX: 2, gridPositionY: 1, color: UIColor.blue)
-//        let skillInfo5 = SkillLayoutInfo(skill: skill5, widthUnit: 2, gridPositionX: 0, gridPositionY: 1, color: UIColor.brown)
-//        let skillInfo4 = SkillLayoutInfo(skill: skill4, widthUnit: 0, gridPositionX: 4, gridPositionY: 0, color: UIColor.cyan)
-//        let skillInfo3 = SkillLayoutInfo(skill: skill3, widthUnit: 0, gridPositionX: 3, gridPositionY: 0, color: UIColor.orange)
-//        let skillInfo2 = SkillLayoutInfo(skill: skill2, widthUnit: 0, gridPositionX: 2, gridPositionY: 0, color: UIColor.gray)
-//        let skillInfo1 = SkillLayoutInfo(skill: skill1, widthUnit: 0, gridPositionX: 1, gridPositionY: 0, color: UIColor.green)
-//        let skillInfo0 = SkillLayoutInfo(skill: skill0, widthUnit: 0, gridPositionX: 0, gridPositionY: 0, color: UIColor.magenta)
-//        
-//        skills.append([skillInfo0, skillInfo1, skillInfo2, skillInfo3, skillInfo4])
-//        skills.append([skillInfo5, skillInfo6])
-//        skills.append([skillInfo7])
-//        
     }
 
 }

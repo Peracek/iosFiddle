@@ -10,7 +10,8 @@ import UIKit
 import CoreData
 
 class Skill: NSManagedObject {
-
+    
+    
     var startIndex: Int {
         return Int(self.layout_column)
     }
