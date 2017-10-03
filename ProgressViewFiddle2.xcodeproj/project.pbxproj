@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BB1DC2191F83CA68000F5EAB /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1DC2181F83CA68000F5EAB /* APIClient.swift */; };
 		BB51CC401F52E09C00A47A3B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB51CC3F1F52E09C00A47A3B /* AppDelegate.swift */; };
 		BB51CC451F52E09C00A47A3B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BB51CC431F52E09C00A47A3B /* Main.storyboard */; };
 		BB51CC471F52E09C00A47A3B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BB51CC461F52E09C00A47A3B /* Assets.xcassets */; };
@@ -16,9 +17,6 @@
 		BB51CC5B1F5D6F9200A47A3B /* SkillCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB51CC5A1F5D6F9200A47A3B /* SkillCollectionViewCell.swift */; };
 		BB51CC7F1F5D775200A47A3B /* SkillModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = BB51CC7D1F5D775200A47A3B /* SkillModel.xcdatamodeld */; };
 		BB51CC811F5D7A7D00A47A3B /* Skill.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB51CC801F5D7A7D00A47A3B /* Skill.swift */; };
-		BB51CC831F5D7E4800A47A3B /* DataHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB51CC821F5D7E4800A47A3B /* DataHelper.swift */; };
-		BBA2F3341F7A874800B2E860 /* SkillController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA2F3331F7A874800B2E860 /* SkillController.swift */; };
-		BBA2F3361F7A971D00B2E860 /* SkillObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA2F3351F7A971D00B2E860 /* SkillObject.swift */; };
 		BBFB17EB1F7A3C3100C1EBF9 /* APIRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBFB17EA1F7A3C3100C1EBF9 /* APIRouter.swift */; };
 		D1918C7A0AA3072D392874C4 /* Pods_ProgressViewFiddle2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B34C9904F006B76430333220 /* Pods_ProgressViewFiddle2.framework */; };
 /* End PBXBuildFile section */
@@ -27,6 +25,7 @@
 		2AC774E3052317DAB76565E6 /* Pods-ProgressViewFiddle2.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ProgressViewFiddle2.release.xcconfig"; path = "Pods/Target Support Files/Pods-ProgressViewFiddle2/Pods-ProgressViewFiddle2.release.xcconfig"; sourceTree = "<group>"; };
 		778C8A48305D20D9BA17D0D6 /* Pods-ProgressViewFiddle2.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ProgressViewFiddle2.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ProgressViewFiddle2/Pods-ProgressViewFiddle2.debug.xcconfig"; sourceTree = "<group>"; };
 		B34C9904F006B76430333220 /* Pods_ProgressViewFiddle2.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ProgressViewFiddle2.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BB1DC2181F83CA68000F5EAB /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		BB51CC3C1F52E09C00A47A3B /* ProgressViewFiddle2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ProgressViewFiddle2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB51CC3F1F52E09C00A47A3B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BB51CC441F52E09C00A47A3B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -38,9 +37,6 @@
 		BB51CC5A1F5D6F9200A47A3B /* SkillCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SkillCollectionViewCell.swift; sourceTree = "<group>"; };
 		BB51CC7E1F5D775200A47A3B /* SkillModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SkillModel.xcdatamodel; sourceTree = "<group>"; };
 		BB51CC801F5D7A7D00A47A3B /* Skill.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Skill.swift; sourceTree = "<group>"; };
-		BB51CC821F5D7E4800A47A3B /* DataHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataHelper.swift; sourceTree = "<group>"; };
-		BBA2F3331F7A874800B2E860 /* SkillController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SkillController.swift; sourceTree = "<group>"; };
-		BBA2F3351F7A971D00B2E860 /* SkillObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SkillObject.swift; sourceTree = "<group>"; };
 		BBFB17EA1F7A3C3100C1EBF9 /* APIRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIRouter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -86,15 +82,13 @@
 		BB51CC3E1F52E09C00A47A3B /* ProgressViewFiddle2 */ = {
 			isa = PBXGroup;
 			children = (
+				BB51CC3F1F52E09C00A47A3B /* AppDelegate.swift */,
 				BB51CC431F52E09C00A47A3B /* Main.storyboard */,
-				BBA2F3331F7A874800B2E860 /* SkillController.swift */,
-				BBA2F3351F7A971D00B2E860 /* SkillObject.swift */,
 				BB51CC521F52E11000A47A3B /* SkillCollectionViewController.swift */,
 				BB51CC5A1F5D6F9200A47A3B /* SkillCollectionViewCell.swift */,
 				BB51CC581F52ECFA00A47A3B /* SkillCollectionViewLayout.swift */,
 				BB51CC801F5D7A7D00A47A3B /* Skill.swift */,
 				BB51CC7D1F5D775200A47A3B /* SkillModel.xcdatamodeld */,
-				BB51CC821F5D7E4800A47A3B /* DataHelper.swift */,
 				BBFB17E91F7A3C1700C1EBF9 /* APIcko */,
 				BB51CC511F52E0B700A47A3B /* Support Files */,
 			);
@@ -104,7 +98,6 @@
 		BB51CC511F52E0B700A47A3B /* Support Files */ = {
 			isa = PBXGroup;
 			children = (
-				BB51CC3F1F52E09C00A47A3B /* AppDelegate.swift */,
 				BB51CC461F52E09C00A47A3B /* Assets.xcassets */,
 				BB51CC481F52E09C00A47A3B /* LaunchScreen.storyboard */,
 				BB51CC4B1F52E09C00A47A3B /* Info.plist */,
@@ -116,6 +109,7 @@
 			isa = PBXGroup;
 			children = (
 				BBFB17EA1F7A3C3100C1EBF9 /* APIRouter.swift */,
+				BB1DC2181F83CA68000F5EAB /* APIClient.swift */,
 			);
 			name = APIcko;
 			sourceTree = "<group>";
@@ -225,12 +219,12 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-ProgressViewFiddle2/Pods-ProgressViewFiddle2-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
-				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
+				"${BUILT_PRODUCTS_DIR}/Sync/Sync.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Sync.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -259,13 +253,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BB51CC831F5D7E4800A47A3B /* DataHelper.swift in Sources */,
-				BBA2F3341F7A874800B2E860 /* SkillController.swift in Sources */,
 				BB51CC5B1F5D6F9200A47A3B /* SkillCollectionViewCell.swift in Sources */,
 				BB51CC531F52E11000A47A3B /* SkillCollectionViewController.swift in Sources */,
 				BB51CC7F1F5D775200A47A3B /* SkillModel.xcdatamodeld in Sources */,
+				BB1DC2191F83CA68000F5EAB /* APIClient.swift in Sources */,
 				BB51CC811F5D7A7D00A47A3B /* Skill.swift in Sources */,
-				BBA2F3361F7A971D00B2E860 /* SkillObject.swift in Sources */,
 				BBFB17EB1F7A3C3100C1EBF9 /* APIRouter.swift in Sources */,
 				BB51CC591F52ECFA00A47A3B /* SkillCollectionViewLayout.swift in Sources */,
 				BB51CC401F52E09C00A47A3B /* AppDelegate.swift in Sources */,

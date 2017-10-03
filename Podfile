@@ -8,6 +8,6 @@ target 'ProgressViewFiddle2' do
   # Pods for ProgressViewFiddle2
 
   pod 'Alamofire', '~> 4.5'
-  pod 'SwiftyJSON'
+  pod 'Sync'
 
 end

@@ -12,8 +12,7 @@ import Alamofire
 
 class SkillCollectionViewController: UICollectionViewController, SkillLayoutDelegate {
     
-    //var container = (UIApplication.shared.delegate as? AppDelegate)?.managedObjectContext.
-    var context = (UIApplication.shared.delegate as? AppDelegate)!.persistentContainer.viewContext
+    var context = AppDelegate.sharedDataStack.viewContext
     
     private var skills: [[Skill]] = []
     private var skillLayout: SkillCollectionViewLayout!
@@ -24,12 +23,10 @@ class SkillCollectionViewController: UICollectionViewController, SkillLayoutDele
         
         getData()
         
-        NotificationCenter.default.addObserver(forName: SkillController.SKILLS_ADDED_NOTIFICATION, object: nil, queue: nil) {_ in 
+        NotificationCenter.default.addObserver(forName: APIClient.SKILLS_SYNCED_NOTIFICATION, object: nil, queue: nil) {_ in
             self.getData()
             self.collectionView?.reloadData()
-            
         }
-        
         
         let pinchRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(SkillCollectionViewController.scaleView(sender:)))
         view.addGestureRecognizer(pinchRecognizer)
