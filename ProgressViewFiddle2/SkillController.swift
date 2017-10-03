@@ -30,30 +30,42 @@ class SkillController {
         newSkill.layout_row = Int16(skill.row)
         newSkill.layout_width = Int16(skill.width)
         
-        skills.append(newSkill)
     }
     
     class func downloadSkills() {
+        var skills = [SkillObject]()
+        
         Alamofire.request(APIRouter.Skills).responseJSON { response in
+            
             if let result = response.result.value as? [NSDictionary] {
                 for raw in result {
-                    let skill = SkillObject(data: raw)
-                    print(skill ?? "N/A")
-                    if skill != nil {
-                        addSkill(skill!)
+                    if let skill = SkillObject(data: raw) {
+                        skills.append(skill)
                     }
                 }
                 
+                updateDatabase(skills)
                 updateRelationships()
                 
                 try! context.save()
                 
                 NotificationCenter.default.post(name: SKILLS_ADDED_NOTIFICATION, object: nil)
+                print("database updated!")
             }
         }
         
 
         
+    }
+    
+    class func updateDatabase(_ skills: [SkillObject]) {
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: SkillObjectClassName)
+        let delete = NSBatchDeleteRequest(fetchRequest: request)
+        try! context.execute(delete)
+        
+        for skill in skills {
+            addSkill(skill)
+        }
     }
     
     class func updateRelationships() {

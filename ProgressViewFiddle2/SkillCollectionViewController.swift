@@ -22,10 +22,7 @@ class SkillCollectionViewController: UICollectionViewController, SkillLayoutDele
         skillLayout = collectionViewLayout as! SkillCollectionViewLayout
         skillLayout.delegate = self
         
-        // TODO opravit, je potreba pockat na seed databaze
-        //sleep(3)
-        //getData()
-        
+        getData()
         
         NotificationCenter.default.addObserver(forName: SkillController.SKILLS_ADDED_NOTIFICATION, object: nil, queue: nil) {_ in 
             self.getData()
@@ -102,6 +99,10 @@ class SkillCollectionViewController: UICollectionViewController, SkillLayoutDele
         do {
             let maxRowSkill = try context.fetch(maxRowRequest)
             let maxColSkill = try context.fetch(maxColumnRequest)
+            
+            guard maxRowSkill.count > 0 else {
+                return
+            }
             
             let numberOfRows = maxRowSkill[0].layout_row + 1
             self.skillLayout.rows = Int(numberOfRows)

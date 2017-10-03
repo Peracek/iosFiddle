@@ -64,11 +64,6 @@ class SkillCollectionViewLayout: UICollectionViewLayout {
             layoutAttributes.append(attr)
         }
         
-        //debug
-        for attr in layoutAttributes {
-            print("attr for section \(attr.indexPath.section) and row \(attr.indexPath.row)")
-        }
-        
         return layoutAttributes
     }
     
