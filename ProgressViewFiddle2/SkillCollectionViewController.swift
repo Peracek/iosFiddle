@@ -13,12 +13,8 @@ import Alamofire
 class SkillCollectionViewController: UICollectionViewController, SkillLayoutDelegate {
     
     var context = AppDelegate.sharedDataStack.viewContext
-    
-    public var useBigCell = false
-    
     private var skills: [[Skill]] = []
     private var skillLayout: SkillCollectionViewLayout!
-    
     private var delegate: SkillCollectionVCDelegate!
     
     override func viewDidLoad() {
@@ -37,67 +33,11 @@ class SkillCollectionViewController: UICollectionViewController, SkillLayoutDele
         view.addGestureRecognizer(pinchRecognizer)
     }
     
-    override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return skills.count
-    }
-    
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return skills[section].count
-    }
-    
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let skill = skills[indexPath.section][indexPath.row]
-        
-        switch delegate.SkillCellSize() {
-        case .big:
-            let bigCell = collectionView.dequeueReusableCell(withReuseIdentifier: "bigCell", for: indexPath) as! SkillLargeCollectionViewCell
-            
-            bigCell.title.text = skill.title
-            bigCell.desc.text = "descriptiocek TODO hej"
-            bigCell.backgroundColor = .green
-            
-            return bigCell
-        case .regular:
-            let smallCell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! SkillCollectionViewCell
-            
-            smallCell.title.text = skill.title
-            smallCell.backgroundColor = .random
-            
-            return smallCell
-        }
-    }
-    
-    // implementation of SkillLayoutDelegate protocol
-    func collectionView(_ collectionView: UICollectionView, gridRectForItemAt indexPath: IndexPath) -> GridRect {
-        let skill = skills[indexPath.section][indexPath.item]
-        return GridRect(
-            x: UInt(skill.layout_column),
-            y: UInt(skill.layout_row),
-            width: UInt(skill.layout_width),
-            height: UInt(1)
-        )
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, indexPathsForItemsBetween startIndex: Int, and endIndex: Int) -> [IndexPath] {
-        var indexPaths: [IndexPath] = []
-        for (section, skillsRow) in self.skills.enumerated() {
-            for (row, skill) in skillsRow.enumerated() {
-                if skill.startIndex < endIndex && skill.endIndex > startIndex {
-                    indexPaths.append(IndexPath(item: row, section: section))
-                }
-            }
-        }
-        return indexPaths
-    }
-
-
     func scaleView(sender: UIPinchGestureRecognizer) {
         skillLayout.scale = sender.scale
         sender.scale = 1
         skillLayout.invalidateLayout()
     }
-    
-    
     
     private func getData() {
         
@@ -133,6 +73,61 @@ class SkillCollectionViewController: UICollectionViewController, SkillLayoutDele
         } catch _ {
         }
     }
+    
+    override func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return skills.count
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return skills[section].count
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let skill = skills[indexPath.section][indexPath.row]
+        
+        switch delegate.SkillCellSize() {
+        case .big:
+            let bigCell = collectionView.dequeueReusableCell(withReuseIdentifier: "bigCell", for: indexPath) as! SkillLargeCollectionViewCell
+            
+            bigCell.title.text = skill.title
+            bigCell.desc.text = "descriptiocek TODO hej"
+            bigCell.backgroundColor = .green
+            
+            return bigCell
+        case .regular:
+            let smallCell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! SkillCollectionViewCell
+            
+            smallCell.title.text = skill.title
+            smallCell.backgroundColor = .random
+            
+            return smallCell
+        }
+    }
+    
+    // MARK: - implementation of SkillLayoutDelegate protocol
+    func collectionView(_ collectionView: UICollectionView, gridRectForItemAt indexPath: IndexPath) -> GridRect {
+        let skill = skills[indexPath.section][indexPath.item]
+        return GridRect(
+            x: UInt(skill.layout_column),
+            y: UInt(skill.layout_row),
+            width: UInt(skill.layout_width),
+            height: UInt(1)
+        )
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, indexPathsForItemsBetween startIndex: Int, and endIndex: Int) -> [IndexPath] {
+        var indexPaths: [IndexPath] = []
+        for (section, skillsRow) in self.skills.enumerated() {
+            for (row, skill) in skillsRow.enumerated() {
+                if skill.startIndex < endIndex && skill.endIndex > startIndex {
+                    indexPaths.append(IndexPath(item: row, section: section))
+                }
+            }
+        }
+        return indexPaths
+    }
+
+
 
 }
 

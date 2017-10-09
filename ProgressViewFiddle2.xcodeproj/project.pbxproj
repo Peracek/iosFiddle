@@ -89,14 +89,13 @@
 				BB51CC3F1F52E09C00A47A3B /* AppDelegate.swift */,
 				BB51CC431F52E09C00A47A3B /* Main.storyboard */,
 				BB51CC521F52E11000A47A3B /* SkillCollectionViewController.swift */,
-				BB51CC5A1F5D6F9200A47A3B /* SkillCollectionViewCell.swift */,
 				BB51CC581F52ECFA00A47A3B /* SkillCollectionViewLayout.swift */,
-				BB51CC801F5D7A7D00A47A3B /* Skill.swift */,
-				BB51CC7D1F5D775200A47A3B /* SkillModel.xcdatamodeld */,
+				BB51CC5A1F5D6F9200A47A3B /* SkillCollectionViewCell.swift */,
+				BB87A8731F8B631B00125006 /* SkillLargeCollectionViewCell.swift */,
+				BB87A8711F8B5C5400125006 /* SkillDetailViewController.swift */,
+				BB87A8751F8BCC6B00125006 /* Model */,
 				BBFB17E91F7A3C1700C1EBF9 /* APIcko */,
 				BB51CC511F52E0B700A47A3B /* Support Files */,
-				BB87A8711F8B5C5400125006 /* SkillDetailViewController.swift */,
-				BB87A8731F8B631B00125006 /* SkillLargeCollectionViewCell.swift */,
 			);
 			path = ProgressViewFiddle2;
 			sourceTree = "<group>";
@@ -109,6 +108,15 @@
 				BB51CC4B1F52E09C00A47A3B /* Info.plist */,
 			);
 			name = "Support Files";
+			sourceTree = "<group>";
+		};
+		BB87A8751F8BCC6B00125006 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				BB51CC801F5D7A7D00A47A3B /* Skill.swift */,
+				BB51CC7D1F5D775200A47A3B /* SkillModel.xcdatamodeld */,
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 		BBFB17E91F7A3C1700C1EBF9 /* APIcko */ = {

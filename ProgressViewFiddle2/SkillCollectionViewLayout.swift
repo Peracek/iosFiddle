@@ -45,7 +45,6 @@ class SkillCollectionViewLayout: UICollectionViewLayout, SkillCollectionVCDelega
         }
     }
     
-    
 //    override func prepare() {
 //        <#code#>
 //    }
@@ -77,8 +76,6 @@ class SkillCollectionViewLayout: UICollectionViewLayout, SkillCollectionVCDelega
     }
     
     override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
-        // FIXME: zkopirovano z layoutAttributesForElments, keep it DRY
-        
         let gridRect = delegate.collectionView(collectionView!, gridRectForItemAt: indexPath)
         let attr = UICollectionViewLayoutAttributes(forCellWith: indexPath)
         let frame = CGRect(
