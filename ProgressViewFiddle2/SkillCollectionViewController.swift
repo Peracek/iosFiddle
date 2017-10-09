@@ -14,12 +14,17 @@ class SkillCollectionViewController: UICollectionViewController, SkillLayoutDele
     
     var context = AppDelegate.sharedDataStack.viewContext
     
+    public var useBigCell = false
+    
     private var skills: [[Skill]] = []
     private var skillLayout: SkillCollectionViewLayout!
+    
+    private var delegate: SkillCollectionVCDelegate!
     
     override func viewDidLoad() {
         skillLayout = collectionViewLayout as! SkillCollectionViewLayout
         skillLayout.delegate = self
+        self.delegate = skillLayout
         
         getData()
         
@@ -41,23 +46,35 @@ class SkillCollectionViewController: UICollectionViewController, SkillLayoutDele
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! SkillCollectionViewCell
-        
         let skill = skills[indexPath.section][indexPath.row]
-        cell.title.text = skill.title
-        cell.backgroundColor = .random
         
-        return cell
+        switch delegate.SkillCellSize() {
+        case .big:
+            let bigCell = collectionView.dequeueReusableCell(withReuseIdentifier: "bigCell", for: indexPath) as! SkillLargeCollectionViewCell
+            
+            bigCell.title.text = skill.title
+            bigCell.desc.text = "descriptiocek TODO hej"
+            bigCell.backgroundColor = .green
+            
+            return bigCell
+        case .regular:
+            let smallCell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! SkillCollectionViewCell
+            
+            smallCell.title.text = skill.title
+            smallCell.backgroundColor = .random
+            
+            return smallCell
+        }
     }
     
     // implementation of SkillLayoutDelegate protocol
-    func collectionView(_ collectionView: UICollectionView, positionAndSizeForItemAt indexPath: IndexPath) -> CGRect {
+    func collectionView(_ collectionView: UICollectionView, gridRectForItemAt indexPath: IndexPath) -> GridRect {
         let skill = skills[indexPath.section][indexPath.item]
-        return CGRect(
-            x: Int(skill.layout_column),
-            y: Int(skill.layout_row),
-            width: max(Int(skill.layout_width), 1),
-            height: 1
+        return GridRect(
+            x: UInt(skill.layout_column),
+            y: UInt(skill.layout_row),
+            width: UInt(skill.layout_width),
+            height: UInt(1)
         )
     }
     
@@ -129,4 +146,13 @@ extension UIColor {
     static var random: UIColor {
         return UIColor(red: .random(), green: .random(), blue: .random(), alpha: 1.0)
     }
+}
+
+protocol SkillCollectionVCDelegate {
+    func SkillCellSize() -> CellSize
+}
+
+enum CellSize {
+    case regular
+    case big
 }
