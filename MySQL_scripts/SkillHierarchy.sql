@@ -1,5 +1,5 @@
 DELIMITER $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `GetHierarchySkillWithSortKeyAndWidth`(IN StartKey INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SkillHierarchy`(IN StartKey INT)
 BEGIN
   -- prepare a hierarchy level variable 
   SET @hierlevel := 00000;
@@ -8,13 +8,13 @@ BEGIN
   SET @lastRowCount := 0;
 
   -- pre-drop temp table
-  DROP TABLE IF EXISTS MyHierarchy;
+  DROP TABLE IF EXISTS skillHierarchy;
 
   -- now, create it as the first level you want... 
   -- ie: a specific top level of all "no parent" entries
   -- or parameterize the function and ask for a specific "ID".
   -- add extra column as flag for next set of ID's to load into this.
-  CREATE TABLE MyHierarchy AS
+  CREATE TABLE skillHierarchy AS
   SELECT s.idskill
        , s.super_skill
        , s.title
@@ -32,21 +32,21 @@ BEGIN
 
   -- we need to have a "key" for updates to be applied against, 
   -- otherwise our UPDATE statement will nag about an unsafe update command
-  CREATE INDEX MyHier_Idx1 ON MyHierarchy (IDHierLevel);
+  CREATE INDEX MyHier_Idx1 ON skillHierarchy (IDHierLevel);
 
 
   -- NOW, keep cycling through until we get no more records
   WHILE @lastRowCount > 0
   DO
 
-    UPDATE MyHierarchy
+    UPDATE skillHierarchy
     SET
       AlreadyProcessed = 1
     WHERE
       IDHierLevel = @hierLevel;
 
     -- NOW, load in all entries found from full-set NOT already processed
-    INSERT INTO MyHierarchy
+    INSERT INTO skillHierarchy
     SELECT DISTINCT s.idskill
                   , s.super_skill
                   , s.title
@@ -54,7 +54,7 @@ BEGIN
                   , 0 AS AlreadyProcessed
                   , 1
     FROM
-      MyHierarchy mh
+      skillHierarchy mh
     JOIN skill s
     ON mh.idskill = s.super_skill
     WHERE
@@ -67,7 +67,7 @@ BEGIN
 
     -- only mark the LOWER level we just joined against as processed,
     -- and NOT the new records we just inserted
-    UPDATE MyHierarchy
+    UPDATE skillHierarchy
     SET
       AlreadyProcessed = 1
     WHERE
@@ -78,41 +78,48 @@ BEGIN
 
   END WHILE;
   
+  SET SQL_SAFE_UPDATES=0;
+  
   WHILE @hierLevel > 0
   DO
   
    SET @hierLevel := @hierLevel -1;
-	
-	update  MyHierarchy
-	join (select super_skill, sum(ChildNr) as cnt from MyHierarchy group by super_skill) c on MyHierarchy.idskill = c.super_skill
-	set childNr = cnt
+  
+  update  skillHierarchy
+  join (select super_skill, sum(ChildNr) as cnt from skillHierarchy group by super_skill) c on skillHierarchy.idskill = c.super_skill
+  set childNr = cnt
     where IDHierLevel = @hierLevel;
-	
+  
   END WHILE;
   
+  SET SQL_SAFE_UPDATES=1;
 
   
 
-	SET @row_num = 0;
+  SET @row_num = 0;
     SET @lewel = -1;
 
   -- return the final set now
   SELECT
-	s.idskill,
+  s.idskill,
     s.title,
-    s.description,
+    s.short_desc,
+    s.icon_url,
+    s.photo_url,
+    s.video_url,
     s.super_skill,
     s.sort_key,
+    s.background_color,
     @row_num:=IF(@lewel=mh.IDHierLevel, @row_num+@width, 0) AS col,
     @lewel:=mh.IDHierLevel as 'row',
     @width:=childNr AS width
   FROM
-    MyHierarchy mh
+    skillHierarchy mh
     JOIN skill s ON mh.idskill = s.idskill
     ORDER BY mh.IDHierLevel;
 
 -- and we can clean-up after the query of data has been selected / returned.
---    drop table if exists MyHierarchy;
+--    drop table if exists skillHierarchy;
 
 
 END$$

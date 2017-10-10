@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="13240" systemVersion="16G29" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Skill" representedClassName=".Skill" syncable="YES" codeGenerationType="category">
-        <attribute name="desc" optional="YES" attributeType="String" syncable="YES">
+        <attribute name="iconUrl" optional="YES" attributeType="String" syncable="YES">
             <userInfo>
-                <entry key="sync.remoteKey" value="description"/>
+                <entry key="sync.remoteKey" value="icon_url"/>
             </userInfo>
         </attribute>
         <attribute name="id" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES">
@@ -12,22 +12,32 @@
                 <entry key="sync.remoteKey" value="idskill"/>
             </userInfo>
         </attribute>
-        <attribute name="layout_column" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES">
+        <attribute name="layoutBackgroundColor" optional="YES" attributeType="String" syncable="YES">
+            <userInfo>
+                <entry key="sync.remoteKey" value="background_color"/>
+            </userInfo>
+        </attribute>
+        <attribute name="layoutColumn" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES">
             <userInfo>
                 <entry key="sync.remoteKey" value="col"/>
             </userInfo>
         </attribute>
-        <attribute name="layout_row" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES">
+        <attribute name="layoutRow" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES">
             <userInfo>
                 <entry key="sync.remoteKey" value="row"/>
             </userInfo>
         </attribute>
-        <attribute name="layout_width" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES">
+        <attribute name="layoutWidth" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES">
             <userInfo>
                 <entry key="sync.remoteKey" value="width"/>
             </userInfo>
         </attribute>
-        <attribute name="super_id" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES">
+        <attribute name="shortDesc" optional="YES" attributeType="String" syncable="YES">
+            <userInfo>
+                <entry key="sync.remoteKey" value="short_desc"/>
+            </userInfo>
+        </attribute>
+        <attribute name="superId" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES">
             <userInfo>
                 <entry key="sync.remoteKey" value="super_skill"/>
             </userInfo>
@@ -40,6 +50,6 @@
         </userInfo>
     </entity>
     <elements>
-        <element name="Skill" positionX="-1224" positionY="3557" width="128" height="180"/>
+        <element name="Skill" positionX="-1224" positionY="3557" width="128" height="210"/>
     </elements>
 </model>

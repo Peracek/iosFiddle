@@ -17,10 +17,10 @@ class APIClient {
     static let SkillClassName = String(describing: Skill.self)
     static let SKILLS_SYNCED_NOTIFICATION = NSNotification.Name("SKILLS_SYNCED")
     
-    // TODO jeste jednou si precist smysl escaping
+    // TODO: jeste jednou si precist smysl escaping
     static func syncSkills(completion handler: @escaping () -> Void = {}) {
         Alamofire.request(APIRouter.Skills).responseJSON { response in
-            // nezapomenout: kdyby byla moznost odejit z tohoto view, je potreba weak self
+            // TODO: nezapomenout: kdyby byla moznost odejit z tohoto view, je potreba weak self
             if let json = response.result.value as? [[String: Any]] {
                 self.dataStack.sync(json, inEntityNamed: self.SkillClassName, completion: { error in
                     if error != nil {
@@ -30,6 +30,7 @@ class APIClient {
                     }
                     self.updateSkillsRelationships()
                     NotificationCenter.default.post(name: SKILLS_SYNCED_NOTIFICATION, object: nil)
+                    print("skills synced with server")
                     handler()
                 })
             }
@@ -42,9 +43,9 @@ class APIClient {
         // TODO error handling
         let skills = try! context.fetch(request)
         for skill in skills {
-            if skill.super_id != 0 {
+            if skill.superId != 0 {
                 let superSkill = skills.filter({
-                    return $0.id == skill.super_id
+                    return $0.id == skill.superId
                 }).first
                 skill.superSkill = superSkill
             }

@@ -43,12 +43,12 @@ class SkillCollectionViewController: UICollectionViewController, SkillLayoutDele
         
         let maxRowRequest = NSFetchRequest<Skill>(entityName: "Skill")
         maxRowRequest.fetchLimit = 1
-        let row_sort = NSSortDescriptor(key: "layout_row", ascending: false)
+        let row_sort = NSSortDescriptor(key: "layoutRow", ascending: false)
         maxRowRequest.sortDescriptors = [row_sort]
         
         let maxColumnRequest = NSFetchRequest<Skill>(entityName: "Skill")
         maxColumnRequest.fetchLimit = 1
-        maxColumnRequest.sortDescriptors = [NSSortDescriptor(key: "layout_column", ascending: false)]
+        maxColumnRequest.sortDescriptors = [NSSortDescriptor(key: "layoutColumn", ascending: false)]
         
         do {
             let maxRowSkill = try context.fetch(maxRowRequest)
@@ -58,14 +58,14 @@ class SkillCollectionViewController: UICollectionViewController, SkillLayoutDele
                 return
             }
             
-            let numberOfRows = maxRowSkill[0].layout_row + 1
+            let numberOfRows = maxRowSkill[0].layoutRow + 1
             self.skillLayout.rows = Int(numberOfRows)
-            self.skillLayout.columns = Int(maxColSkill[0].layout_column) + 1
+            self.skillLayout.columns = Int(maxColSkill[0].layoutColumn) + 1
             
             for row in 0..<numberOfRows {
                 let req = NSFetchRequest<Skill>(entityName: "Skill")
-                req.predicate = NSPredicate(format: "layout_row == %d", row)
-                req.sortDescriptors = [NSSortDescriptor(key: "layout_column", ascending: true)]
+                req.predicate = NSPredicate(format: "layoutRow == %d", row)
+                req.sortDescriptors = [NSSortDescriptor(key: "layoutColumn", ascending: true)]
                 let skillRow = try context.fetch(req)
                 self.skills.append(skillRow)
             }
@@ -90,15 +90,16 @@ class SkillCollectionViewController: UICollectionViewController, SkillLayoutDele
             let bigCell = collectionView.dequeueReusableCell(withReuseIdentifier: "bigCell", for: indexPath) as! SkillLargeCollectionViewCell
             
             bigCell.title.text = skill.title
-            bigCell.desc.text = "descriptiocek TODO hej"
-            bigCell.backgroundColor = .green
+            bigCell.desc.text = skill.shortDesc
+            bigCell.imageURL = URL(string: skill.iconUrl ?? "") // TODO: preklopit to do URL pri nacteni z databaze
+            bigCell.backgroundColor = UIColor(hexString: skill.layoutBackgroundColor ?? "") // TODO: preklopit to do UIColor pri nacteni z db
             
             return bigCell
         case .regular:
             let smallCell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! SkillCollectionViewCell
             
             smallCell.title.text = skill.title
-            smallCell.backgroundColor = .random
+            smallCell.backgroundColor = UIColor(hexString: skill.layoutBackgroundColor ?? "")
             
             return smallCell
         }
@@ -108,9 +109,9 @@ class SkillCollectionViewController: UICollectionViewController, SkillLayoutDele
     func collectionView(_ collectionView: UICollectionView, gridRectForItemAt indexPath: IndexPath) -> GridRect {
         let skill = skills[indexPath.section][indexPath.item]
         return GridRect(
-            x: UInt(skill.layout_column),
-            y: UInt(skill.layout_row),
-            width: UInt(skill.layout_width),
+            x: UInt(skill.layoutColumn),
+            y: UInt(skill.layoutRow),
+            width: UInt(skill.layoutWidth),
             height: UInt(1)
         )
     }
@@ -138,6 +139,19 @@ extension CGFloat {
 }
 
 extension UIColor {
+    convenience init?(hexString: String) {
+        let hex = hexString.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
+        if hex.characters.count != 6 {
+            return nil
+        }
+        var int = UInt32()
+        Scanner(string: hex).scanHexInt32(&int)
+        let r, g, b: UInt32
+        (r, g, b) = (int >> 16, int >> 8 & 0xFF, int & 0xFF)
+        
+        self.init(red: CGFloat(r) / 255, green: CGFloat(g) / 255, blue: CGFloat(b) / 255, alpha: CGFloat(1))
+    }
+    
     static var random: UIColor {
         return UIColor(red: .random(), green: .random(), blue: .random(), alpha: 1.0)
     }

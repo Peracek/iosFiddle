@@ -4,13 +4,13 @@ var connection = mysql.createConnection({
 	host: 'localhost',
 	user: 'root',
 	password: 'root',
-	database: 'progressView2'
+	database: 'konapp'
 });
 
 connection.connect();
 
 function getSkills(success) {
-	connection.query("call GetHierarchySkillWithSortKeyAndWidth(1);", function(err, result) {
+	connection.query("call SkillHierarchy(9);", function(err, result) {
 		var skills = result[0];
 		success(skills);
 	});

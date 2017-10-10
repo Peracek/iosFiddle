@@ -13,11 +13,11 @@ class Skill: NSManagedObject {
     
     
     var startIndex: Int {
-        return Int(self.layout_column)
+        return Int(self.layoutColumn)
     }
     
     var endIndex: Int {
-        return Int(self.layout_column + self.layout_width)
+        return Int(self.layoutColumn + self.layoutWidth)
     }
     
 }

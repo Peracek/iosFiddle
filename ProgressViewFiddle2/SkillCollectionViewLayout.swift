@@ -31,22 +31,33 @@ class SkillCollectionViewLayout: UICollectionViewLayout, SkillCollectionVCDelega
         }
     }
     
-    private var cellHeight: CGFloat = 100.0
+    // TODO: overit zda neni zbytecne vypocetne narocne, zda nevypocitavat pouze pri zmene rotace (viewViewLayoutSubviews)
+    private var cellHeight: CGFloat {
+        if let viewHeight = collectionView?.frame.height {
+            let totalVerticalSpacing = CGFloat(max(rows - 1, 0)) * cellSpacing
+            return (viewHeight - totalVerticalSpacing) / CGFloat(rows)
+        }
+        return CGFloat(1)
+        
+    }
     
     public var delegate: SkillLayoutDelegate!
     
     public var columns: Int = 0
-    public var rows: Int = 0 {
-        didSet {
-            if let viewHeight = collectionView?.frame.height {
-                let totalVerticalSpacing = CGFloat(max(rows - 1, 0)) * cellSpacing
-                cellHeight = (viewHeight - totalVerticalSpacing) / CGFloat(rows)
-            }
-        }
-    }
+    public var rows: Int = 0
+//    public var rows: Int = 0 {
+//        didSet {
+//            if let viewHeight = collectionView?.frame.height {
+//                let totalVerticalSpacing = CGFloat(max(rows - 1, 0)) * cellSpacing
+//                cellHeight = (viewHeight - totalVerticalSpacing) / CGFloat(rows)
+//            }
+//        }
+//    }
     
+    // TODO: zvysit efektivitu collectionViewLayoutu pomoci prepare
+    // https://developer.apple.com/documentation/uikit/uicollectionviewlayout/1617784-prepare
 //    override func prepare() {
-//        <#code#>
+//        super.prepare()
 //    }
     
     override var collectionViewContentSize: CGSize {
@@ -124,10 +135,11 @@ struct GridRect {
     var height: UInt
     
     var horizontalSpaces: UInt {
-        return max(width - 1, 0)
+        // TODO: jde to nejak elegantneji? (stejnetak pro vericalSpaces)
+        return UInt(max(Int(width) - 1, 0))
     }
     
     var verticalSpaces: UInt {
-        return max(height - 1, 0)
+        return UInt(max(Int(height) - 1, 0))
     }
 }
