@@ -8,22 +8,23 @@
 
 import UIKit
 
-class SkillCollectionViewLayout: UICollectionViewLayout, SkillCollectionVCDelegate {
+class SkillCollectionViewLayout: UICollectionViewLayout {
     
     let bigCellWidthBreakpoint: CGFloat = 200
 
     public var scale: CGFloat = 1.0
+    public var delegate: SkillLayoutDelegate!
     
-    private var cellWidth: CGFloat = 100.0 {
-        didSet {
-            if (cellWidth >= bigCellWidthBreakpoint && oldValue < bigCellWidthBreakpoint) {
-                collectionView?.reloadData()
-            }
-            if (cellWidth < bigCellWidthBreakpoint && oldValue >= bigCellWidthBreakpoint) {
-                collectionView?.reloadData()
-            }
+    private lazy var cellWidth: CGFloat = {
+        if self.baseSection != nil {
+            return self.collectionView!.frame.width / CGFloat(self.collectionView!.numberOfItems(inSection: self.baseSection!))
         }
-    }
+        return 0
+    }()
+    private lazy var cellHeight: CGFloat = {
+        // make sure it's cheap operation
+        return self.collectionView!.frame.height / CGFloat(self.collectionView!.numberOfSections)
+    }()
     
     private var layoutCache = [UICollectionViewLayoutAttributes]()
     
@@ -34,18 +35,13 @@ class SkillCollectionViewLayout: UICollectionViewLayout, SkillCollectionVCDelega
         return nil
     }
     
-    private var cellHeight: CGFloat {
-        // make sure it's cheap operation
-        return collectionView!.frame.height / CGFloat(collectionView!.numberOfSections)
-    }
-    
-    public var delegate: SkillLayoutDelegate!
+    private var boundsChanged = false
     
     override var collectionViewContentSize: CGSize {
         let numberOfBaseCells = baseSection != nil ? collectionView!.numberOfItems(inSection: baseSection!) : 0
         return CGSize(
             width: CGFloat(numberOfBaseCells) * cellWidth,
-            height: collectionView!.frame.height
+            height: CGFloat(collectionView!.numberOfSections) * cellHeight
         )
     }
     
@@ -67,19 +63,46 @@ class SkillCollectionViewLayout: UICollectionViewLayout, SkillCollectionVCDelega
                 }
             }
         }
-        else {
-            for item in layoutCache {
-                item.scale(x: scale, y: 1)
+        else if boundsChanged {
+            // if new bounds width is biggr then width of content, then enlarge it
+            if collectionView!.bounds.width > collectionViewContentSize.width {
+                let scaleX = collectionView!.bounds.width / collectionViewContentSize.width
+                layoutCache.forEach { attr in
+                    attr.scale(x: scaleX, y: 1)
+                }
             }
-            // set new cellWidth
+            if collectionView!.bounds.height != collectionViewContentSize.height {
+                let scaleY = collectionView!.bounds.height / collectionViewContentSize.height
+                layoutCache.forEach { attr in
+                    attr.scale(x: 1, y: scaleY)
+                }
+            }
+            boundsChanged = false
+            // TODO: make sure it's the baseSection cell width
+
             cellWidth = layoutCache.last?.frame.width ?? 0
+            cellHeight = layoutCache.last?.frame.height ?? 0
         }
+        else {
+            if collectionView!.bounds.width <= collectionViewContentSize.width || scale > 1 {
+                let screenWidthToContentRatio = collectionView!.bounds.width / collectionViewContentSize.width
+                if collectionViewContentSize.width * scale < collectionView!.bounds.width {
+                    scale = screenWidthToContentRatio
+                }
+                for item in layoutCache {
+                    item.scale(x: scale, y: 1)
+                }
+                // TODO: make sure it's the baseSection cell width
+                cellWidth = layoutCache.last?.frame.width ?? 0
+            }
+        }
+        
     }
     
     override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
-        if collectionView!.bounds.height != newBounds.height {
-            print("zmena vysky")
-            layoutCache = [UICollectionViewLayoutAttributes]()
+        if collectionView!.bounds.height != newBounds.height
+            || collectionView!.bounds.width != newBounds.width {
+            boundsChanged = true
             return true
         }
         
@@ -102,18 +125,6 @@ class SkillCollectionViewLayout: UICollectionViewLayout, SkillCollectionVCDelega
             return $0.indexPath == indexPath
         }
     }
-    
-    // MARK: - Implementation of SkillCollectionVCDelegate
-    
-    func SkillCellSize() -> CellSize {
-        if cellWidth >= bigCellWidthBreakpoint {
-            return .big
-        }
-        else {
-            return .regular
-        }
-    }
-    
 }
 
 protocol SkillLayoutDelegate {
@@ -135,7 +146,6 @@ extension UICollectionViewLayoutAttributes {
     func scale(x: CGFloat, y: CGFloat) {
         self.frame = frame.applying(CGAffineTransform(scaleX: x, y: y))
     }
-    
 }
 
 struct GridRect {

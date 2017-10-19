@@ -15,12 +15,10 @@ class SkillCollectionViewController: UICollectionViewController, SkillLayoutDele
     var context = AppDelegate.sharedDataStack.viewContext
     private var skills: [[Skill]] = []
     private var skillLayout: SkillCollectionViewLayout!
-    private var delegate: SkillCollectionVCDelegate!
     
     override func viewDidLoad() {
         skillLayout = collectionViewLayout as! SkillCollectionViewLayout
         skillLayout.delegate = self
-        self.delegate = skillLayout
         
         getData()
         
@@ -37,10 +35,9 @@ class SkillCollectionViewController: UICollectionViewController, SkillLayoutDele
         skillLayout.scale = sender.scale
         skillLayout.invalidateLayout()
         
-        let originalPointOffsetInScreen = sender.location(in: nil)
-        let newPointOffsetInView = sender.location(in: collectionView).applying(CGAffineTransform(scaleX: sender.scale, y: 0))
-        
-        let newContentOffset = newPointOffsetInView.applying(CGAffineTransform(translationX: -originalPointOffsetInScreen.x, y: 0))
+        let pinchOffsetOnScreen = sender.location(in: nil)
+        let pinchOffsetInNewlyScaledView = sender.location(in: collectionView).applying(CGAffineTransform(scaleX: sender.scale, y: 0))
+        let newContentOffset = CGPoint(x: (pinchOffsetInNewlyScaledView.x - pinchOffsetOnScreen.x).atLeastZero, y: 0)
         
         collectionView?.setContentOffset(newContentOffset, animated: false)
         sender.scale = 1
@@ -96,25 +93,15 @@ class SkillCollectionViewController: UICollectionViewController, SkillLayoutDele
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let skill = skills[indexPath.section][indexPath.row]
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "skillCell", for: indexPath) as! SkillCollectionViewCell
         
-        switch delegate.SkillCellSize() {
-        case .big:
-            let bigCell = collectionView.dequeueReusableCell(withReuseIdentifier: "bigCell", for: indexPath) as! SkillLargeCollectionViewCell
-            
-            bigCell.title.text = skill.title
-            bigCell.desc.text = skill.shortDesc
-            bigCell.imageURL = URL(string: skill.iconUrl ?? "") // TODO: preklopit to do URL pri nacteni z databaze
-            bigCell.backgroundColor = UIColor(hexString: skill.layoutBackgroundColor ?? "") // TODO: preklopit to do UIColor pri nacteni z db
-            
-            return bigCell
-        case .regular:
-            let smallCell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! SkillCollectionViewCell
-            
-            smallCell.title.text = skill.title
-            smallCell.backgroundColor = UIColor(hexString: skill.layoutBackgroundColor ?? "")
-            
-            return smallCell
-        }
+        cell.title.text = skill.title
+        cell.desc.text = skill.shortDesc
+        cell.iconURL = skill.iconUrl
+        cell.backgroundColor = UIColor(hexString: skill.layoutBackgroundColor ?? "") // TODO: preklopit to do UIColor pri nacteni z db
+        
+        return cell
+
     }
     
     // MARK: - implementation of SkillLayoutDelegate protocol
@@ -148,6 +135,10 @@ extension CGFloat {
     static func random() -> CGFloat {
         return CGFloat(arc4random()) / CGFloat(UInt32.max)
     }
+    
+    var atLeastZero: CGFloat {
+        return self < 0 ? 0 : self
+    }
 }
 
 extension UIColor {
@@ -169,11 +160,3 @@ extension UIColor {
     }
 }
 
-protocol SkillCollectionVCDelegate {
-    func SkillCellSize() -> CellSize
-}
-
-enum CellSize {
-    case regular
-    case big
-}
