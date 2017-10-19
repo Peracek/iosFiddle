@@ -8,8 +8,7 @@
         </attribute>
         <attribute name="id" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES">
             <userInfo>
-                <entry key="sync.isPrimaryKey" value="true"/>
-                <entry key="sync.remoteKey" value="idskill"/>
+                <entry key="hyper.isPrimaryKey" value="true"/>
             </userInfo>
         </attribute>
         <attribute name="layoutBackgroundColor" optional="YES" attributeType="String" syncable="YES">

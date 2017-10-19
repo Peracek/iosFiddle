@@ -11,7 +11,7 @@ import Alamofire
 
 enum APIRouter: URLRequestConvertible {
     
-    static let baseURL = "http://localhost:8080"
+    static let baseURL = "http://192.168.0.103:8080"
     
     case Skill(id: Int)
     case Skills

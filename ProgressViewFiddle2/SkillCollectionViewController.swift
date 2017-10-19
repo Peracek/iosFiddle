@@ -35,11 +35,22 @@ class SkillCollectionViewController: UICollectionViewController, SkillLayoutDele
     
     func scaleView(sender: UIPinchGestureRecognizer) {
         skillLayout.scale = sender.scale
-        sender.scale = 1
         skillLayout.invalidateLayout()
+        
+        let originalPointOffsetInScreen = sender.location(in: nil)
+        let newPointOffsetInView = sender.location(in: collectionView).applying(CGAffineTransform(scaleX: sender.scale, y: 0))
+        
+        let newContentOffset = newPointOffsetInView.applying(CGAffineTransform(translationX: -originalPointOffsetInScreen.x, y: 0))
+        
+        collectionView?.setContentOffset(newContentOffset, animated: false)
+        sender.scale = 1
     }
     
     private func getData() {
+        
+        if !skills.isEmpty {
+            skills = [[Skill]]()
+        }
         
         let maxRowRequest = NSFetchRequest<Skill>(entityName: "Skill")
         maxRowRequest.fetchLimit = 1
@@ -59,8 +70,6 @@ class SkillCollectionViewController: UICollectionViewController, SkillLayoutDele
             }
             
             let numberOfRows = maxRowSkill[0].layoutRow + 1
-            self.skillLayout.rows = Int(numberOfRows)
-            self.skillLayout.columns = Int(maxColSkill[0].layoutColumn) + 1
             
             for row in 0..<numberOfRows {
                 let req = NSFetchRequest<Skill>(entityName: "Skill")
@@ -79,7 +88,10 @@ class SkillCollectionViewController: UICollectionViewController, SkillLayoutDele
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return skills[section].count
+        if !skills.isEmpty {
+            return skills[section].count
+        }
+        return 0
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

@@ -10,100 +10,103 @@ import UIKit
 
 class SkillCollectionViewLayout: UICollectionViewLayout, SkillCollectionVCDelegate {
     
-    let largeCellLimit: CGFloat = 200
-    
-    var cellSpacing: CGFloat = 5.0
+    let bigCellWidthBreakpoint: CGFloat = 200
 
-    public var scale: CGFloat = 1.0 {
-        didSet {
-            cellWidth = cellWidth * scale
-        }
-    }
+    public var scale: CGFloat = 1.0
     
     private var cellWidth: CGFloat = 100.0 {
         didSet {
-            if (cellWidth >= largeCellLimit && oldValue < largeCellLimit) {
+            if (cellWidth >= bigCellWidthBreakpoint && oldValue < bigCellWidthBreakpoint) {
                 collectionView?.reloadData()
             }
-            if (cellWidth < largeCellLimit && oldValue >= largeCellLimit) {
+            if (cellWidth < bigCellWidthBreakpoint && oldValue >= bigCellWidthBreakpoint) {
                 collectionView?.reloadData()
             }
         }
     }
     
-    // TODO: overit zda neni zbytecne vypocetne narocne, zda nevypocitavat pouze pri zmene rotace (viewViewLayoutSubviews)
-    private var cellHeight: CGFloat {
-        if let viewHeight = collectionView?.frame.height {
-            let totalVerticalSpacing = CGFloat(max(rows - 1, 0)) * cellSpacing
-            return (viewHeight - totalVerticalSpacing) / CGFloat(rows)
+    private var layoutCache = [UICollectionViewLayoutAttributes]()
+    
+    private var baseSection: Int? {
+        if collectionView!.numberOfSections > 0 {
+            return collectionView!.numberOfSections - 1
         }
-        return CGFloat(1)
-        
+        return nil
+    }
+    
+    private var cellHeight: CGFloat {
+        // make sure it's cheap operation
+        return collectionView!.frame.height / CGFloat(collectionView!.numberOfSections)
     }
     
     public var delegate: SkillLayoutDelegate!
     
-    public var columns: Int = 0
-    public var rows: Int = 0
-//    public var rows: Int = 0 {
-//        didSet {
-//            if let viewHeight = collectionView?.frame.height {
-//                let totalVerticalSpacing = CGFloat(max(rows - 1, 0)) * cellSpacing
-//                cellHeight = (viewHeight - totalVerticalSpacing) / CGFloat(rows)
-//            }
-//        }
-//    }
-    
-    // TODO: zvysit efektivitu collectionViewLayoutu pomoci prepare
-    // https://developer.apple.com/documentation/uikit/uicollectionviewlayout/1617784-prepare
-//    override func prepare() {
-//        super.prepare()
-//    }
-    
     override var collectionViewContentSize: CGSize {
-        let totalHorizontalSpacing = CGFloat(max(columns - 1, 0)) * cellSpacing
+        let numberOfBaseCells = baseSection != nil ? collectionView!.numberOfItems(inSection: baseSection!) : 0
         return CGSize(
-            width: CGFloat(columns) * cellWidth + totalHorizontalSpacing,
-            height: collectionView?.frame.height ?? 0
+            width: CGFloat(numberOfBaseCells) * cellWidth,
+            height: collectionView!.frame.height
         )
+    }
+    
+    override func prepare() {
+        if layoutCache.isEmpty {
+            for section in 0..<collectionView!.numberOfSections {
+                for item in 0..<collectionView!.numberOfItems(inSection: section) {
+                    let indexPath = IndexPath(item: item, section: section)
+                    let gridRect = delegate.collectionView(collectionView!, gridRectForItemAt: indexPath)
+                    let attr = UICollectionViewLayoutAttributes(forCellWith: indexPath)
+                    let frame = CGRect(
+                        x: CGFloat(gridRect.x),
+                        y: CGFloat(gridRect.y),
+                        width: CGFloat(gridRect.width),
+                        height: CGFloat(gridRect.height)
+                    )
+                    attr.frame = frame.applying(CGAffineTransform(scaleX: cellWidth, y: cellHeight))
+                    layoutCache.append(attr)
+                }
+            }
+        }
+        else {
+            for item in layoutCache {
+                item.scale(x: scale, y: 1)
+            }
+            // set new cellWidth
+            cellWidth = layoutCache.last?.frame.width ?? 0
+        }
+    }
+    
+    override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
+        if collectionView!.bounds.height != newBounds.height {
+            print("zmena vysky")
+            layoutCache = [UICollectionViewLayoutAttributes]()
+            return true
+        }
+        
+        return false
     }
     
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
-        var layoutAttributes: [UICollectionViewLayoutAttributes] = []
-        
-        // pricitam cellSpacing abych nenacital bunku vlevo, v pripade ze uz jsem ve spacingu vpravo od ni
-        let minIndex = Int(floor(((rect.minX + cellSpacing) / (cellWidth + cellSpacing))))
-        let maxIndex = Int(ceil(rect.maxX / (cellWidth + cellSpacing)))
+        let minIndex = Int(floor(rect.minX / cellWidth))
+        let maxIndex = Int(ceil(rect.maxX / cellWidth))
         
         let indexPaths = delegate.collectionView(collectionView!, indexPathsForItemsBetween: minIndex, and: maxIndex)
         
-        for indexPath in indexPaths {
-            if let attr = layoutAttributesForItem(at: indexPath) {
-                layoutAttributes.append(attr)
-            }
+        return layoutCache.filter {
+            return indexPaths.contains($0.indexPath)
         }
-        
-        return layoutAttributes
     }
     
     override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
-        let gridRect = delegate.collectionView(collectionView!, gridRectForItemAt: indexPath)
-        let attr = UICollectionViewLayoutAttributes(forCellWith: indexPath)
-        let frame = CGRect(
-            x: CGFloat(gridRect.x) * cellWidth + CGFloat(gridRect.x) * cellSpacing,
-            y: CGFloat(gridRect.y) * cellHeight + CGFloat(gridRect.y) * cellSpacing,
-            width: CGFloat(gridRect.width) * cellWidth + CGFloat(gridRect.horizontalSpaces) * cellSpacing,
-            height: CGFloat(gridRect.height) * cellHeight
-        )
-        attr.frame = frame
-        
-        return attr
+        return layoutCache.first {
+            return $0.indexPath == indexPath
+        }
     }
     
     // MARK: - Implementation of SkillCollectionVCDelegate
     
     func SkillCellSize() -> CellSize {
-        if cellWidth >= largeCellLimit {
+        if cellWidth >= bigCellWidthBreakpoint {
             return .big
         }
         else {
@@ -126,6 +129,13 @@ extension Int {
         let minBounded = Swift.max(self, minVal)
         return Swift.min(minBounded, maxVal)
     }
+}
+
+extension UICollectionViewLayoutAttributes {
+    func scale(x: CGFloat, y: CGFloat) {
+        self.frame = frame.applying(CGAffineTransform(scaleX: x, y: y))
+    }
+    
 }
 
 struct GridRect {

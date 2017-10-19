@@ -28,7 +28,8 @@ class APIClient {
                         print(error!)
                         return
                     }
-                    self.updateSkillsRelationships()
+                    // TODO: zakomentovano, jinak se totiz dupluji zaznamy, sync je pridava znovu a znovu
+                    //self.updateSkillsRelationships()
                     NotificationCenter.default.post(name: SKILLS_SYNCED_NOTIFICATION, object: nil)
                     print("skills synced with server")
                     handler()

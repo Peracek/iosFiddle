@@ -171,6 +171,7 @@
 				TargetAttributes = {
 					BB51CC3B1F52E09C00A47A3B = {
 						CreatedOnToolsVersion = 8.3.3;
+						DevelopmentTeam = EB226A97TZ;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -400,6 +401,7 @@
 			baseConfigurationReference = 778C8A48305D20D9BA17D0D6 /* Pods-ProgressViewFiddle2.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = EB226A97TZ;
 				INFOPLIST_FILE = ProgressViewFiddle2/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = cz.pavelperoutka.ProgressViewFiddle2;
@@ -413,6 +415,7 @@
 			baseConfigurationReference = 2AC774E3052317DAB76565E6 /* Pods-ProgressViewFiddle2.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = EB226A97TZ;
 				INFOPLIST_FILE = ProgressViewFiddle2/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = cz.pavelperoutka.ProgressViewFiddle2;
