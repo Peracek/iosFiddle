@@ -52,7 +52,7 @@ class SkillCollectionViewCell: UICollectionViewCell {
 //    }
     
     func printInfo() {
-        print("\(title.text ?? ""), zero: \(zeroWidthIconConstraint.priority), proportional: \(proportionalWidthIconConstraint.priority), width: \(contentView.bounds.width)")
+        print("\(title.text ?? ""), zero: \(zeroWidthIconConstraint.priority), proportional: \(proportionalWidthIconConstraint.priority), contentWidth: \(contentView.bounds.width)")
     }
     
     override func prepareForReuse() {
@@ -64,14 +64,14 @@ class SkillCollectionViewCell: UICollectionViewCell {
     
     private func turnBigCell() {
         //icon.isHidden = false
-        zeroWidthIconConstraint.priority = 250
-        proportionalWidthIconConstraint.priority = 750
+        zeroWidthIconConstraint.isActive = false
+        proportionalWidthIconConstraint.isActive = true
         isBigCell = true
     }
     private func turnNormalCell() {
         //icon.isHidden = true
-        zeroWidthIconConstraint.priority = 750
-        proportionalWidthIconConstraint.priority = 250
+        zeroWidthIconConstraint.isActive = true
+        proportionalWidthIconConstraint.isActive = false
         isBigCell = false
     }
     
