@@ -7,13 +7,46 @@
 //
 
 import UIKit
+import CoreData
+import Alamofire
 
 class SkillDetailViewController: UIViewController {
+    
+    var skillId: Int?
 
+    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var descriptionLabel: UILabel!
+    @IBOutlet weak var photo: UIImageView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        if let skillId = skillId {
+            titleLabel.text = "\(skillId)"
+            
+            let request = NSFetchRequest<Skill>(entityName: String(describing: Skill.self))
+            request.predicate = NSPredicate(format: "id == %d", skillId)
+            do {
+                let skill = try AppDelegate.sharedDataStack.mainContext.fetch(request).first
+                titleLabel.text = skill?.title
+                descriptionLabel.text = skill?.shortDesc
+                fetchImage(url: skill?.photoUrl)
+            }
+            catch _ {}
+        }
         // Do any additional setup after loading the view.
+    }
+    
+    func  fetchImage(url: String?) {
+        if let imageUrl = URL(string: url ?? "") {
+            let urlRequest = URLRequest(url: imageUrl)
+            Alamofire.request(urlRequest).responseData(completionHandler: { [weak self] response in
+                // check if still care
+                if let data = response.data {
+                    self?.photo.image = UIImage(data: data)
+                }
+            })
+        }
     }
 
     override func didReceiveMemoryWarning() {

@@ -95,6 +95,7 @@ class SkillCollectionViewController: UICollectionViewController, SkillLayoutDele
         let skill = skills[indexPath.section][indexPath.row]
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "skillCell", for: indexPath) as! SkillCollectionViewCell
         
+        cell.skillId = Int(skill.id)
         cell.title.text = skill.title
         cell.desc.text = skill.shortDesc
         cell.iconURL = skill.iconUrl
@@ -127,7 +128,19 @@ class SkillCollectionViewController: UICollectionViewController, SkillLayoutDele
         return indexPaths
     }
 
-
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let identifier = segue.identifier {
+            switch identifier {
+            case "showSkill":
+                let skillVC = segue.destination as! SkillDetailViewController
+                let senderCell = sender as! SkillCollectionViewCell
+                skillVC.skillId = senderCell.skillId
+            default:
+                fatalError("Unexpected value \(identifier)")
+            }
+            
+        }
+    }
 
 }
 
