@@ -31,6 +31,11 @@
                 <entry key="sync.remoteKey" value="width"/>
             </userInfo>
         </attribute>
+        <attribute name="longDesc" optional="YES" attributeType="String" syncable="YES">
+            <userInfo>
+                <entry key="sync.remoteKey" value="long_desc"/>
+            </userInfo>
+        </attribute>
         <attribute name="photoUrl" optional="YES" attributeType="String" syncable="YES">
             <userInfo>
                 <entry key="sync.remoteKey" value="photo_url"/>
@@ -54,6 +59,6 @@
         </userInfo>
     </entity>
     <elements>
-        <element name="Skill" positionX="-1224" positionY="3557" width="128" height="225"/>
+        <element name="Skill" positionX="-1224" positionY="3557" width="128" height="240"/>
     </elements>
 </model>

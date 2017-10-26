@@ -15,7 +15,7 @@ class SkillDetailViewController: UIViewController {
     var skillId: Int?
 
     @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var descriptionLabel: UILabel!
+    @IBOutlet weak var longDesc: UITextView!
     @IBOutlet weak var photo: UIImageView!
     
     override func viewDidLoad() {
@@ -29,7 +29,7 @@ class SkillDetailViewController: UIViewController {
             do {
                 let skill = try AppDelegate.sharedDataStack.mainContext.fetch(request).first
                 titleLabel.text = skill?.title
-                descriptionLabel.text = skill?.shortDesc
+                longDesc.text = skill?.longDesc ?? "nix"
                 fetchImage(url: skill?.photoUrl)
             }
             catch _ {}

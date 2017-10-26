@@ -12,6 +12,10 @@ import Alamofire
 
 class SkillCollectionViewController: UICollectionViewController, SkillLayoutDelegate {
     
+    @IBAction func refresh(_ sender: UIBarButtonItem) {
+        APIClient.syncSkills()
+    }
+    
     var context = AppDelegate.sharedDataStack.viewContext
     private var skills: [[Skill]] = []
     private var skillLayout: SkillCollectionViewLayout!

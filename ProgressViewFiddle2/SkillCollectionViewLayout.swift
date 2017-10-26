@@ -15,18 +15,13 @@ class SkillCollectionViewLayout: UICollectionViewLayout {
     public var scale: CGFloat = 1.0
     public var delegate: SkillLayoutDelegate!
     
-    private lazy var cellWidth: CGFloat = {
-        if self.baseSection != nil {
-            return self.collectionView!.frame.width / CGFloat(self.collectionView!.numberOfItems(inSection: self.baseSection!))
+    private var collectionViewIsNotEmpty: Bool {
+        // TODO: opravit, prilis draha operace
+        if let baseSection = baseSection {
+            return self.collectionView!.numberOfItems(inSection: baseSection) > 0
         }
-        return 0
-    }()
-    private lazy var cellHeight: CGFloat = {
-        // make sure it's cheap operation
-        return self.collectionView!.frame.height / CGFloat(self.collectionView!.numberOfSections)
-    }()
-    
-    private var layoutCache = [UICollectionViewLayoutAttributes]()
+        return false
+    }
     
     private var baseSection: Int? {
         if collectionView!.numberOfSections > 0 {
@@ -35,14 +30,32 @@ class SkillCollectionViewLayout: UICollectionViewLayout {
         return nil
     }
     
+    private lazy var cellWidth: CGFloat? = {
+        if self.collectionViewIsNotEmpty {
+            return self.collectionView!.frame.width / CGFloat(self.collectionView!.numberOfItems(inSection: self.baseSection!))
+        }
+        return nil
+    }()
+    private lazy var cellHeight: CGFloat? = {
+        if self.collectionViewIsNotEmpty {
+            return self.collectionView!.frame.height / CGFloat(self.collectionView!.numberOfSections)
+        }
+        return nil
+    }()
+    
+    private var layoutCache = [UICollectionViewLayoutAttributes]()
+    
     private var boundsChanged = false
     
     override var collectionViewContentSize: CGSize {
-        let numberOfBaseCells = baseSection != nil ? collectionView!.numberOfItems(inSection: baseSection!) : 0
-        return CGSize(
-            width: CGFloat(numberOfBaseCells) * cellWidth,
-            height: CGFloat(collectionView!.numberOfSections) * cellHeight
-        )
+        if collectionViewIsNotEmpty {
+            let numberOfBaseCells = collectionView!.numberOfItems(inSection: baseSection!)
+            return CGSize(
+                width: CGFloat(numberOfBaseCells) * (cellWidth!),
+                height: CGFloat(collectionView!.numberOfSections) * (cellHeight!)
+            )
+        }
+        return CGSize(width: 0, height: 0)
     }
     
     override func prepare() {
@@ -58,7 +71,7 @@ class SkillCollectionViewLayout: UICollectionViewLayout {
                         width: CGFloat(gridRect.width),
                         height: CGFloat(gridRect.height)
                     )
-                    attr.frame = frame.applying(CGAffineTransform(scaleX: cellWidth, y: cellHeight))
+                    attr.frame = frame.applying(CGAffineTransform(scaleX: cellWidth!, y: cellHeight!))
                     layoutCache.append(attr)
                 }
             }
@@ -110,14 +123,17 @@ class SkillCollectionViewLayout: UICollectionViewLayout {
     }
     
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
-        let minIndex = Int(floor(rect.minX / cellWidth))
-        let maxIndex = Int(ceil(rect.maxX / cellWidth))
-        
-        let indexPaths = delegate.collectionView(collectionView!, indexPathsForItemsBetween: minIndex, and: maxIndex)
-        
-        return layoutCache.filter {
-            return indexPaths.contains($0.indexPath)
+        if collectionViewIsNotEmpty {
+            let minIndex = Int(floor(rect.minX / cellWidth!))
+            let maxIndex = Int(ceil(rect.maxX / cellWidth!))
+            
+            let indexPaths = delegate.collectionView(collectionView!, indexPathsForItemsBetween: minIndex, and: maxIndex)
+            
+            return layoutCache.filter {
+                return indexPaths.contains($0.indexPath)
+            }
         }
+        return nil
     }
     
     override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
