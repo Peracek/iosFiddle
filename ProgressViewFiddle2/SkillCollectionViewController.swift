@@ -28,6 +28,7 @@ class SkillCollectionViewController: UICollectionViewController, SkillLayoutDele
         
         NotificationCenter.default.addObserver(forName: APIClient.SKILLS_SYNCED_NOTIFICATION, object: nil, queue: nil) {_ in
             self.getData()
+            self.skillLayout.resetLayoutCache()
             self.collectionView?.reloadData()
         }
         

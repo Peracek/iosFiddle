@@ -47,6 +47,10 @@ class SkillCollectionViewLayout: UICollectionViewLayout {
     
     private var boundsChanged = false
     
+    public func resetLayoutCache() {
+        layoutCache = [UICollectionViewLayoutAttributes]()
+    }
+    
     override var collectionViewContentSize: CGSize {
         if collectionViewIsNotEmpty {
             let numberOfBaseCells = collectionView!.numberOfItems(inSection: baseSection!)
